@@ -36,6 +36,15 @@ A lightweight MATLAB toolkit for **consistent figure typography** across project
 
 ---
 
+## Requirements & compatibility
+
+- **MATLAB R2019b+** is recommended (uses `arguments` blocks in helper functions).
+- **`style_panel` requires `uifigure`** (App Designer UI components; available in modern MATLAB releases).
+- **`save_figure` uses `exportgraphics` when available** (R2020a+); older versions fall back to `print`/`savefig`.
+- **Fonts must be installed locally** on each machine; missing fonts will fall back to system defaults.
+
+---
+
 ## Apply a specific profile
 
 You can select a built-in name or point to a JSON file:

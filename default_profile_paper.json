@@ -1,0 +1,23 @@
+{
+  "FigureWidthInches": 6.75,
+  "FigureHeightInches": 4.25,
+  "FigureUnits": "inches",
+  "ApplyFigureSize": true,
+  "FigureColor": "w",
+  "AxesFontSize": 9,
+  "AxesFontWeight": "normal",
+  "LabelFontSize": 10,
+  "LabelFontWeight": "normal",
+  "TitleFontSize": 11,
+  "TitleFontWeight": "normal",
+  "SGTitleFontSize": 11,
+  "SGTitleFontWeight": "normal",
+  "LegendFontSize": 10,
+  "LegendFontWeight": "normal",
+  "CommonFontName": "Arial",
+  "AxesLineWidth": 0.75,
+  "AxesBox": "off",
+  "AxesTickDir": "out",
+  "Interpreter": "tex",
+  "TickLabelInterpreter": "tex"
+}

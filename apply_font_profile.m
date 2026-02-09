@@ -1,18 +1,46 @@
-function apply_font_profile(profile_file)
+function apply_font_profile(profile_file, options)
 % APPLY_FONT_PROFILE Apply a JSON font profile to the current figure.
 %
 % Usage:
 %   apply_font_profile()
-%   apply_font_profile('default_profile_presentation.json')
-%   apply_font_profile('default_profile_paper.json')
-%   apply_font_profile('my_profile.json')
 %   apply_font_profile('presentation')
 %   apply_font_profile('paper')
+%   apply_font_profile('my_profile.json')
+%
+%   % Inline overrides (R2021a+ name=value syntax):
+%   apply_font_profile(ApplyFigureSize=false)
+%   apply_font_profile('paper', TitleFontWeight='bold')
+%   apply_font_profile('paper', AxesFontSize=12, LabelFontSize=14)
+
+    arguments
+        profile_file string = ""
+        options.FigureWidthInches
+        options.FigureHeightInches
+        options.FigureUnits
+        options.ApplyFigureSize
+        options.FigureColor
+        options.AxesFontSize
+        options.AxesFontWeight
+        options.LabelFontSize
+        options.LabelFontWeight
+        options.TitleFontSize
+        options.TitleFontWeight
+        options.SGTitleFontSize
+        options.SGTitleFontWeight
+        options.LegendFontSize
+        options.LegendFontWeight
+        options.CommonFontName
+        options.AxesLineWidth
+        options.AxesBox
+        options.AxesTickDir
+        options.Interpreter
+        options.TickLabelInterpreter
+    end
 
     this_dir = fileparts(mfilename('fullpath'));
     default_presentation_profile = fullfile(this_dir, 'default_profile_presentation.json');
 
-    if nargin < 1 || isempty(profile_file)
+    if profile_file == ""
         resolved_profile_file = default_presentation_profile;
     else
         resolved_profile_file = resolve_profile_file(profile_file, this_dir);
@@ -21,6 +49,12 @@ function apply_font_profile(profile_file)
     default_profile_struct = style_profile_load(default_presentation_profile);
     input_profile_struct = style_profile_load(resolved_profile_file);
     merged_profile_struct = merge_profile(default_profile_struct, input_profile_struct);
+
+    % Apply name-value overrides on top of the merged profile
+    override_fields = fieldnames(options);
+    for idx = 1:numel(override_fields)
+        merged_profile_struct.(override_fields{idx}) = options.(override_fields{idx});
+    end
 
     apply_profile_to_current_figure(merged_profile_struct);
 end

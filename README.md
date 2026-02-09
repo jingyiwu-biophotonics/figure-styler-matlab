@@ -63,6 +63,55 @@ apply_font_profile('my_custom_profile.json')
 
 ---
 
+## Inline overrides
+
+You can override individual profile settings directly without editing a JSON file.
+This is useful when you mostly like a profile but need to tweak a few settings for a specific figure:
+
+```matlab
+% Skip figure resizing for one particular figure
+apply_font_profile(ApplyFigureSize=false)
+
+% Use the paper profile but make titles bold
+apply_font_profile('paper', TitleFontWeight='bold')
+
+% Override multiple settings at once
+apply_font_profile('paper', AxesFontSize=12, LabelFontSize=14, AxesLineWidth=1.5)
+
+% Works with any profile + any combination of settings
+apply_font_profile('my_custom_profile.json', CommonFontName='Helvetica', ApplyFigureSize=false)
+```
+
+All profile fields are supported as overrides:
+
+| Setting | Example value | Description |
+|---|---|---|
+| `ApplyFigureSize` | `false` | Skip resizing the figure |
+| `FigureWidthInches` | `8.0` | Figure width |
+| `FigureHeightInches` | `5.0` | Figure height |
+| `FigureUnits` | `'inches'` | Units for figure size |
+| `FigureColor` | `'w'` | Figure background color |
+| `CommonFontName` | `'Helvetica'` | Font for all text elements |
+| `AxesFontSize` | `12` | Axes tick-label font size |
+| `AxesFontWeight` | `'bold'` | Axes tick-label font weight |
+| `LabelFontSize` | `14` | Axis label font size |
+| `LabelFontWeight` | `'bold'` | Axis label font weight |
+| `TitleFontSize` | `16` | Title font size |
+| `TitleFontWeight` | `'bold'` | Title font weight |
+| `SGTitleFontSize` | `16` | Subplot group title font size |
+| `SGTitleFontWeight` | `'bold'` | Subplot group title font weight |
+| `LegendFontSize` | `12` | Legend font size |
+| `LegendFontWeight` | `'bold'` | Legend font weight |
+| `AxesLineWidth` | `1.5` | Axes border line width |
+| `AxesBox` | `'on'` | Show axes box |
+| `AxesTickDir` | `'in'` | Tick direction (`'in'` or `'out'`) |
+| `Interpreter` | `'latex'` | Text interpreter |
+| `TickLabelInterpreter` | `'latex'` | Tick-label interpreter |
+
+> **Note:** The `Name=value` calling syntax requires **MATLAB R2021a+**. On R2019b–R2020b the same overrides work with the traditional syntax: `apply_font_profile('paper', 'TitleFontWeight', 'bold')`.
+
+---
+
 ## Use the style UI
 
 ```matlab

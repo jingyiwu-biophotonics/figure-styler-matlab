@@ -7,6 +7,9 @@ function figure_gallery_demo(profile_file)
 %   figure_gallery_demo('presentation')
 %   figure_gallery_demo('default_profile_paper.json')
 %   figure_gallery_demo('default_profile_presentation.json')
+%
+% The demo also shows inline overrides on some figures. See the source
+% for examples of apply_font_profile(..., Name=value) usage.
 
     this_dir = fileparts(mfilename('fullpath'));
 
@@ -47,7 +50,8 @@ function figure_gallery_demo(profile_file)
     legend('Location', 'best');
     grid on;
     figure(fig_scatter);
-    apply_font_profile(resolved_profile_file);
+    % Override: bold titles, use Times New Roman
+    apply_font_profile(resolved_profile_file, TitleFontWeight='bold', CommonFontName='Times New Roman');
 
     fig_image = figure('Name', 'Gallery: Image');
     imagesc(peaks(200));
@@ -79,7 +83,8 @@ function figure_gallery_demo(profile_file)
 
     sgtitle('Subplot Layout');
     figure(fig_subplot);
-    apply_font_profile(resolved_profile_file);
+    % Override: skip figure resizing, use bold sgtitle
+    apply_font_profile(resolved_profile_file, ApplyFigureSize=false, SGTitleFontWeight='bold');
 end
 
 function resolved_profile_file = resolve_profile_file(profile_file, this_dir)

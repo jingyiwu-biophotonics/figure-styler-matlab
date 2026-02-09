@@ -12,6 +12,7 @@ A lightweight MATLAB toolkit for **consistent figure typography** across project
 ## Repo contents
 
 - `apply_font_profile.m` — apply a profile to the current figure (or target figure)
+- `apply_default_profile.m` — set session-wide figure defaults via `groot` (for use in `startup.m`)
 - `style_panel.m` — interactive UI panel
 - `style_profile_load.m` / `style_profile_save.m` — load/save `.json` profiles
 - `save_figure.m` — export helper (raster with DPI; vector formats)
@@ -157,6 +158,63 @@ figure_gallery_demo('presentation')
 
 ---
 
+## Session defaults (`startup.m`)
+
+MATLAB runs a file called `startup.m` automatically every time the application launches. You can use `apply_default_profile` in your `startup.m` so that every new figure inherits your preferred style without any extra calls.
+
+### Setup
+
+1. Make sure this toolkit folder is on your MATLAB path.
+   The easiest way is to add it permanently via **Home → Set Path → Add Folder** and click **Save**, so it persists across sessions.
+
+2. Open (or create) your `startup.m` file.
+   The standard location is `~/Documents/MATLAB/startup.m`. You can find it quickly with:
+   ```matlab
+   edit(fullfile(userpath, 'startup.m'))
+   ```
+
+3. Add one line:
+   ```matlab
+   apply_default_profile('presentation');
+   ```
+
+That's it. Every MATLAB session will now start with the presentation profile applied globally.
+
+### Examples
+
+```matlab
+% Use the paper profile instead
+apply_default_profile('paper');
+
+% Use your own custom JSON profile
+apply_default_profile('/path/to/my_lab_style.json');
+
+% Start from a built-in profile but override a few settings
+apply_default_profile('paper', AxesFontSize=11, CommonFontName='Helvetica');
+```
+
+### What gets set (and what doesn't)
+
+`apply_default_profile` sets defaults on the **graphics root object** (`groot`) for axes, text, legends, and colorbars — the same properties you see in the JSON profiles.
+
+Two categories of properties are intentionally **skipped**:
+
+- **Figure size** (`FigureWidthInches`, `FigureHeightInches`, `ApplyFigureSize`) — setting a global default figure size overrides MATLAB's automatic window placement and is rarely desirable.  Use `apply_font_profile()` to size individual figures instead.
+- **Subplot group title** (`SGTitleFontSize`, `SGTitleFontWeight`) — MATLAB does not expose `sgtitle` defaults through `groot`.  These are applied per-figure by `apply_font_profile()`.
+
+### `apply_default_profile` vs `apply_font_profile`
+
+| | `apply_default_profile` | `apply_font_profile` |
+|---|---|---|
+| **Scope** | Session-wide (all future figures) | Single figure (current `gcf`) |
+| **Mechanism** | Sets `groot` default properties | Directly modifies figure/axes handles |
+| **Figure size** | Skipped | Applied when `ApplyFigureSize=true` |
+| **Typical use** | Once in `startup.m` | Per-figure in scripts |
+
+> **Tip:** The two functions complement each other.  Use `apply_default_profile` in `startup.m` for your everyday baseline, then call `apply_font_profile` in individual scripts when you need per-figure sizing or a different profile for a specific plot.
+
+---
+
 ## Common workflow patterns
 
 ### A. Standardize figures in a script
@@ -170,6 +228,11 @@ save_figure('fig1', 'pdf');
 1. Run `style_panel()` and tune settings.
 2. Save a project-specific profile JSON.
 3. Use that JSON in your paper/analysis scripts.
+
+### C. Set-and-forget with `startup.m`
+1. Pick your preferred profile (or create one with `style_panel`).
+2. Add `apply_default_profile('presentation')` to your `startup.m`.
+3. Every MATLAB session starts with your preferred defaults — no extra code needed in scripts.
 
 ---
 
